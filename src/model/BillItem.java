@@ -39,14 +39,18 @@ public class BillItem {
 		super();
 	}
 
-	public BillItem(String billSource, double billCost) {
+	public BillItem(String billName, double billCost) {
 		super();
-		this.billSource = billSource;
+		this.billName = billName;
 		this.billCost = billCost;
 
 	}
 
-	
+	/*
+	 * 09/14/2021 changing it this deep in is going to be a pain
+	 * but next time, you don't need billName/billCost as a variable name.
+	 * It's redundant when you are going to be calling things like bill.name.
+	 */
 	@Id
 	/*
 	 * This annotation 
@@ -61,7 +65,9 @@ public class BillItem {
 	 * This annotation changes the column name for this field. 
 	 */
 	private int id;
-	private String billSource;
+	@Column(name="name")
+	private String billName;
+	@Column(name="cost")
 	private double billCost;
 
 	/**
@@ -79,17 +85,17 @@ public class BillItem {
 	}
 
 	/**
-	 * @return the billSource
+	 * @return the billName
 	 */
-	public String getBillSource() {
-		return billSource;
+	public String getBillName() {
+		return billName;
 	}
 
 	/**
-	 * @param billSource the billSource to set
+	 * @param billName the billName to set
 	 */
-	public void setBillType(String billSource) {
-		this.billSource = billSource;
+	public void setBillName(String billName) {
+		this.billName = billName;
 	}
 
 	/**
@@ -108,7 +114,7 @@ public class BillItem {
 
 	@Override
 	public String toString() {
-		return billSource + ": $" + billCost;
+		return id + ": " + billName + ": $" + billCost;
 	}
 
 }
