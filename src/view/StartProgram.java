@@ -1,3 +1,4 @@
+package view;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Scanner;
@@ -23,7 +24,22 @@ public class StartProgram {
 		MainMenu();
 	}
 
-	// this method will output the options for the menu.
+	private static void performIntValidation() {
+		// TODO Auto-generated method stub
+		while (!in.hasNextInt()) {
+			System.out.println("Entry must be a number.");
+			in.nextLine();
+		}
+	}
+
+	private static void performDoubleValidation() {
+		// TODO Auto-generated method stub
+		while (!in.hasNextDouble()) {
+			System.out.println("You must enter a number. Please try again.");
+			in.nextLine();
+		}
+	}
+
 	private static void MainMenu() {
 		boolean continueMainMenu = true;
 		String menuOptions = "-- What would you like to do? --\n-- 1 <Create Bill>\n-- 2 <Search for a bill to edit or delete>\n-- 3 Show All Entries\n-- 4 <Exit>";
@@ -31,6 +47,7 @@ public class StartProgram {
 		System.out.println("Bill List");
 		while (continueMainMenu) {
 			System.out.println(menuOptions);
+			performIntValidation();
 			int userEntry = in.nextInt();
 			in.nextLine();
 
@@ -53,42 +70,27 @@ public class StartProgram {
 			}
 		}
 		System.out.println("Exiting.");
+		bih.exitResourceClosing();
 		in.close();
 		System.exit(0);
 	}
 
-	// Need a method each for CRUD (create, retrieve, update, delete)
-	/*
-	 * This method is the create (insert into table). The first thing to do is
-	 * accept everything from the console and then pass those values to the method
-	 * of the helper class.
-	 */
 	private static void createBill() {
 		System.out.println("Enter bill name: ");
 		String billName = in.nextLine();
 		System.out.println("Enter bill amount: ");
-		while (!in.hasNextDouble()) {
-			System.out.println("You must enter a number. Please try again.");
-			in.nextLine();
-			System.out.println("Enter bill amount: ");
-		}
+		performDoubleValidation();
 		double billCost = in.nextDouble();
 		BillItem newBillEntry = new BillItem(billName, billCost);
 		bih.addBill(newBillEntry);
 		System.out.println(billName + ": " + df.format(billCost) + " added.");
 	}
 
-	/*
-	 * Retrieve method (retrieval). Search.
-	 */
 	private static void searchMenu() {
 		System.out.println("1. Search for bill by name.\n2. Search for bill by cost.");
 		boolean continueSearchMenu = true;
 		while (continueSearchMenu) {
-			while (!in.hasNextInt()) {
-				System.out.println("Entry must be a number. Try again: ");
-				in.nextLine();
-			}
+			performIntValidation();
 			int searchSelection = in.nextInt();
 			in.nextLine();
 			switch (searchSelection) {
@@ -108,27 +110,38 @@ public class StartProgram {
 
 	}
 
-	/**
-	 * @param billEntry
-	 * 
-	 */
-
 	private static void searchBillsByName() {
 		List<BillItem> billEntry;
 		System.out.println("Enter Name: ");
 		String name = in.nextLine();
 		billEntry = bih.searchByName(name);
-		printEnteredList(billEntry);
-		searchBillsById();
+		if (!billEntry.isEmpty()) {
+			printEnteredList(billEntry);
+			searchBillsById();
+		} else {
+			System.out.println("Nothing was found with that name.\nTry again?\n1. YES 2. NO");
+			performIntValidation();
+			int selection = in.nextInt();
+			boolean exit = true;
+			while (exit) {
+				switch (selection) {
+				case 1:
+					in.nextLine();
+					searchBillsByName();
+					break;
+				default:
+					exit = false;
+					break;
+
+				}
+			}
+		}
 	}
 
 	private static void searchBillsByCost() {
 		List<BillItem> billEntry;
 		System.out.println("Will show any bill > entered cost.\nEnter Cost: ");
-		while (!in.hasNextDouble()) {
-			System.out.println("Entry must be a number. Try again: ");
-			in.nextLine();
-		}
+		performDoubleValidation();
 		double cost = in.nextDouble();
 		billEntry = bih.searchByCost(cost);
 		printEnteredList(billEntry);
@@ -139,27 +152,21 @@ public class StartProgram {
 	private static void searchBillsById() {
 		// TODO Auto-generated method stub
 		System.out.println("Enter ID to select bill: ");
-		while (!in.hasNextInt()) {
-			System.out.println("Entry must be a number.");
-			in.nextLine();
-		}
+		performIntValidation();
 		int enteredNumber = in.nextInt();
 		in.nextLine();
-		editOrDeleteOptions(bih.searchBillsById(enteredNumber));
+		editOrDeleteMenu(bih.searchBillsById(enteredNumber));
 
 	}
 
-	private static void editOrDeleteOptions(BillItem selectedEntry) {
+	private static void editOrDeleteMenu(BillItem selectedEntry) {
 
 		boolean continueMenu = true;
 
 		System.out.println("What would you like to do with this bill?\n 1. Edit\n 2. Delete\n 3. Cancel");
 		continueMenu = true;
 		while (continueMenu) {
-			while (!in.hasNextInt()) {
-				System.out.println("Entry must be the number 1 or 2 or 3.");
-				in.nextLine();
-			}
+			performIntValidation();
 			int searchSelection = in.nextInt();
 			in.nextLine();
 			switch (searchSelection) {
@@ -183,10 +190,7 @@ public class StartProgram {
 
 	public static void editBillEntry(BillItem billToEdit) {
 		System.out.println("1. Edit Name\n2. Edit Cost");
-		while (!in.hasNextInt()) {
-			System.out.println("Entry must be a number.");
-			in.nextLine();
-		}
+		performIntValidation();
 		int selection = in.nextInt();
 		in.nextLine();
 		boolean continueMenu = true;
@@ -200,10 +204,7 @@ public class StartProgram {
 				break;
 			case 2:
 				System.out.println("Enter new bill Cost: ");
-				while (!in.hasNextDouble()) {
-					System.out.println("Please enter a number.");
-					in.nextLine();
-				}
+				performDoubleValidation();
 				double newBillCost = in.nextDouble();
 				billToEdit.setBillCost(newBillCost);
 				continueMenu = false;
@@ -219,16 +220,14 @@ public class StartProgram {
 
 	public static void deleteBillEntry(BillItem billToDelete) {
 		System.out.println("This item will be deleted!!\nAre you sure?\n1. Yes\n2. No");
-		while (!in.hasNextInt()) {
-			System.out.println("Entry must be 1(yes) or 2(no)");
-			in.nextLine();
-		}
+		performIntValidation();
 		int selection = in.nextInt();
 		if (selection == 1) {
 			bih.deleteBillEntry(billToDelete);
 
 		} else {
-			editOrDeleteOptions(billToDelete);
+			editOrDeleteMenu(billToDelete);
+			System.out.println(billToDelete + " has been deleted!");
 		}
 	}
 

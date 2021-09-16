@@ -68,11 +68,9 @@ public class BillItemHelper {
 		// TODO Auto-generated method stub
 		EntityManager em = emFactory.createEntityManager();
 		em.getTransaction().begin();
-
 		TypedQuery<BillItem> typedQuery = em.createQuery("select bill from BillItem bill where bill.billName = :selectedBillName", BillItem.class);
 		typedQuery.setParameter("selectedBillName", name);
 		List<BillItem> foundBills = typedQuery.getResultList();
-
 		em.close();
 		return foundBills;
 	}
@@ -84,8 +82,13 @@ public class BillItemHelper {
 	 */
 	public List<BillItem> searchByCost(double cost) {
 		// TODO Auto-generated method stub
-		System.out.println("Searching by cost");
-		return null;
+		EntityManager em = emFactory.createEntityManager();
+		em.getTransaction().begin();
+		TypedQuery<BillItem> typedQuery =em.createQuery("select bi from BillItem bi where bi.billCost >= :selectedCost",BillItem.class);
+		typedQuery.setParameter("selectedCost", cost);
+		List<BillItem> foundBills = typedQuery.getResultList();
+		em.close();
+		return foundBills;
 	}
 
 	/**
@@ -102,9 +105,17 @@ public class BillItemHelper {
 
 	/**
 	 * @param selectedEntry
+	 * update method.
+	 * in the merge method, 
 	 */
 	public void editBillEntry(BillItem selectedEntry) {
 		// TODO Auto-generated method stub
+		EntityManager em = emFactory.createEntityManager();
+		em.getTransaction().begin();
+		em.merge(selectedEntry);
+		em.getTransaction().commit();
+		em.close();
+		
 
 	}
 
@@ -113,7 +124,23 @@ public class BillItemHelper {
 	 */
 	public void deleteBillEntry(BillItem billToDelete) {
 		// TODO Auto-generated method stub
-		System.out.println("Entry Deleted.");
+		EntityManager em = emFactory.createEntityManager();
+		em.getTransaction().begin();
+		TypedQuery<BillItem> typedQuery = em.createQuery("select bi from BillItem bi where bi.billName = :selectedName and bi.billCost = :selectedCost",BillItem.class);
+		
+		typedQuery.setParameter("selectedName", billToDelete.getBillName());
+		typedQuery.setParameter("selectedCost", billToDelete.getBillCost());
+		
+		typedQuery.setMaxResults(1);
+		
+		BillItem result = typedQuery.getSingleResult();
+		
+		em.remove(result);
+		em.getTransaction().commit();
+		em.close();
 	}
 
+	public void exitResourceClosing() {
+		emFactory.close();
+	}
 }

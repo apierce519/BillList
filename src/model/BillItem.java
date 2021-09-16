@@ -5,10 +5,13 @@
  */
 package model;
 
+import java.text.DecimalFormat;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 /*
  * These import statements are generated/suggested by Eclipse
@@ -55,7 +58,8 @@ public class BillItem {
 	/*
 	 * This annotation 
 	 */
-	@GeneratedValue
+	@GeneratedValue(generator="cust_seq")
+	@SequenceGenerator(name="cust_seq",sequenceName="cust_seq", allocationSize=1)
 	/*
 	 * This annotation will instruct JPA to automatically generate the ID number
 	 * for each instance.
@@ -69,6 +73,8 @@ public class BillItem {
 	private String billName;
 	@Column(name="cost")
 	private double billCost;
+
+	static DecimalFormat df = new DecimalFormat("$#.00");
 
 	/**
 	 * @return the id
@@ -114,7 +120,7 @@ public class BillItem {
 
 	@Override
 	public String toString() {
-		return id + ": " + billName + ": $" + billCost;
+		return id + ": " + billName + ": " + df.format(billCost);
 	}
 
 }
