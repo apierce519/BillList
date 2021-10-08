@@ -47,16 +47,18 @@ public class CreateNewBillListServlet extends HttpServlet {
 				BillItem c = bih.searchBillsById(Integer.parseInt(selectedBills[i]));
 				selectedBillList.add(c);
 			}
+		} else {
+			System.out.println("Selected Bills was null");
 		}
 		BillList bl = new BillList(billListName);
 		bl.setListOfBills(selectedBillList);
 
 		BillListHelper blh = new BillListHelper();
 		blh.insertNewBillList(bl);
-		
+
 		System.out.println("Success");
 		System.out.println(bl.toString());
-		
+
 		getServletContext().getRequestDispatcher("/generateBillItemListServlet").forward(request, response);
 	}
 

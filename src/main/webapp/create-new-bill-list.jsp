@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<form action = "createNewBillListServlet" method = post>
+	<form action = "createNewBillListServlet" method = "post">
 	
 		List Name: <input type = "text" name = "billListName"><br>
 		
