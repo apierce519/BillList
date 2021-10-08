@@ -13,13 +13,13 @@ import model.BillItem;
  * Servlet implementation class addBillServlet
  */
 @WebServlet("/addBillServlet")
-public class addBillServlet extends HttpServlet {
+public class AddBillServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public addBillServlet() {
+	public AddBillServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

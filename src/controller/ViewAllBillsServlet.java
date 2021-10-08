@@ -29,6 +29,7 @@ public class ViewAllBillsServlet extends HttpServlet {
 		BillItemHelper dao = new BillItemHelper();
 		request.setAttribute("allBills", dao.showAllBills());
 		String path = "/billList.jsp";
+		
 		if(dao.showAllBills().isEmpty()) {
 			path = "/StartPage.html";
 		}

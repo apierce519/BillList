@@ -23,6 +23,7 @@
 		<input type = "submit" value = "delete" name = "doThisCommand">
 		<input type = "submit" value = "add" name = "doThisCommand">
 	</form>
-
+<br>
+<a href = "StartPage.html">Return to Start Page</a>
 </body>
 </html>
