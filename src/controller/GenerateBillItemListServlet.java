@@ -1,11 +1,15 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import model.Bill;
 
 /**
  * Servlet implementation class generateBillItemListServlet
@@ -29,15 +33,7 @@ public class GenerateBillItemListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		BillItemHelper dao = new BillItemHelper();
-		
-		request.setAttribute("allBills", dao.showAllBills());
-		if(dao.showAllBills().isEmpty()) {
-			request.setAttribute("allBills", " ");
-		}
-		System.out.println(dao.showAllBills());
-		getServletContext().getRequestDispatcher("/add-bill-list.jsp").forward(request, response);
-
+		request.setAttribute("allBills", generateAllBills());
 	}
 
 	/**
@@ -50,4 +46,16 @@ public class GenerateBillItemListServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	public void sendToNextPage(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			getServletContext().getRequestDispatcher("/add-bill-list.jsp").forward(request, response);
+		} catch (ServletException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public List<Bill> generateAllBills() {
+		BillHelper dao = new BillHelper();
+		return dao.showAllBills();
+	}
 }

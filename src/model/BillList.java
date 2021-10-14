@@ -24,8 +24,8 @@ public class BillList {
 	@GeneratedValue
 	private int id;
 	private String listName;
-	@OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	private List<BillItem> listOfBills;
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	private List<Bill> listOfBills;
 	
 	/**
 	 * 
@@ -39,7 +39,7 @@ public class BillList {
 	 * @param listName
 	 * @param listOfBills
 	 */
-	public BillList(int id, String listName, List<BillItem> listOfBills) {
+	public BillList(int id, String listName, List<Bill> listOfBills) {
 		super();
 		this.id = id;
 		this.listName = listName;
@@ -81,7 +81,7 @@ public class BillList {
 	/**
 	 * @return the listOfBills
 	 */
-	public List<BillItem> getListOfBills() {
+	public List<Bill> getListOfBills() {
 		return listOfBills;
 	}
 
@@ -102,7 +102,7 @@ public class BillList {
 	/**
 	 * @param listOfBills the listOfBills to set
 	 */
-	public void setListOfBills(List<BillItem> listOfBills) {
+	public void setListOfBills(List<Bill> listOfBills) {
 		this.listOfBills = listOfBills;
 	}
 

@@ -1,13 +1,17 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.BillItem;
+import model.Bill;
+import model.BillList;
 
 /**
  * Servlet implementation class EditBillServlet
@@ -43,15 +47,15 @@ public class EditBillServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 
-		BillItemHelper dao = new BillItemHelper();
+		BillHelper dao = new BillHelper();
 
 		String billName = request.getParameter("billName");
 		String billCost = request.getParameter("billCost");
 		Integer tempId = Integer.parseInt(request.getParameter("id"));
 
-		BillItem billToUpdate = dao.searchBillsById(tempId);
-		billToUpdate.setBillName(billName);
-		billToUpdate.setBillCost(Double.parseDouble(billCost));
+		Bill billToUpdate = dao.searchBillsById(tempId);
+		billToUpdate.setName(billName);
+		billToUpdate.setCost(Double.parseDouble(billCost));
 
 		dao.editBillEntry(billToUpdate);
 

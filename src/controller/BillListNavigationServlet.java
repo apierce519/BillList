@@ -15,6 +15,7 @@ import model.BillList;
 @WebServlet("/billListNavigationServlet")
 public class BillListNavigationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static String path = "/viewAllBillListsServlet";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -40,44 +41,71 @@ public class BillListNavigationServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-		BillListHelper dao = new BillListHelper();
-		String act = request.getParameter("doThisCommand");
-		if (act == null) {
-			System.out.println("Nothing selected.");
-			getServletContext().getRequestDispatcher("/viewAllBillListsServlet").forward(request, response);
-		} else if (act.equals("delete")) {
-			try {
-				Integer tempId = Integer.parseInt(request.getParameter("id"));
-				BillList foundList = dao.searchForBillListById(tempId);
-				dao.deleteList(foundList);
-			} catch (NumberFormatException e) {
-				System.out.println("No item selected.");
-			} finally {
-				getServletContext().getRequestDispatcher("/viewAllBillListsServlet").forward(request, response);
-			}
-		} else if (act.equals("edit")) {
-			try {
-				Integer tempId = Integer.parseInt(request.getParameter("id"));
-				BillList foundList = dao.searchForBillListById(tempId);
-				request.setAttribute("billListToEdit", foundList);
 
-				BillItemHelper daoForItems = new BillItemHelper();
-				request.setAttribute("allListItems", daoForItems.showAllBills());
+		String command = request.getParameter("doThisCommand");
 
-				if (daoForItems.showAllBills().isEmpty()) {
-					request.setAttribute("allListItems", " ");
-				}
-				getServletContext().getRequestDispatcher("/edit-bill-list.jsp").forward(request, response);
-			} catch (NumberFormatException | ServletException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				getServletContext().getRequestDispatcher("/viewAllListsServlet").forward(request, response);
+		if (command == null) {
+			System.out.println("Nothing Selected");
+			sendToNextPage(request, response, path);
+		} else {
+			switch (command) {
+			case "add":
+				addBillList();
+				break;
+			case "delete":
+				deleteBillList(request, response);
+				break;
+			case "edit":
+				editBillList(request, response);
+			default:
+				break;
 			}
-		} else if (act.equals("add")) {
-			getServletContext().getRequestDispatcher("/generateBillItemListServlet").forward(request, response);
+		}
+
+		sendToNextPage(request, response, path);
+
+	}
+
+	public void sendToNextPage(HttpServletRequest request, HttpServletResponse response, String path) {
+		try {
+			getServletContext().getRequestDispatcher(path).forward(request, response);
+		} catch (ServletException | IOException e) {
+			e.printStackTrace();
 		}
 	}
 
+	public BillList searchBillLists(HttpServletRequest request, HttpServletResponse response) {
+		BillListHelper dao = new BillListHelper();
+		Integer tempId = null;
+		try {
+			tempId = Integer.parseInt(request.getParameter("id"));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			System.out.println("No list was selected");
+			sendToNextPage(request, response, path);
+		}
+		return dao.searchForBillListById(tempId);
+	}
+
+	public void deleteBillList(HttpServletRequest request, HttpServletResponse response) {
+		BillListHelper dao = new BillListHelper();
+		dao.deleteList(searchBillLists(request, response));
+	}
+
+	public void editBillList(HttpServletRequest request, HttpServletResponse response) {
+		BillList toEdit = searchBillLists(request, response);
+		request.setAttribute("billListToEdit", toEdit);
+
+		BillHelper billDao = new BillHelper();
+		request.setAttribute("allBills", billDao.showAllBills());
+
+		if (billDao.showAllBills().isEmpty()) {
+			request.setAttribute("allBills", " ");
+		}
+		path = "/edit-bill-list.jsp";
+	}
+
+	public void addBillList() {
+		path = "/create-new-bill-list.jsp";
+	}
 }

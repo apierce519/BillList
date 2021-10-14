@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -26,7 +27,7 @@ import javax.persistence.Table;
  * In JPA, each entity has its own database table.
  */
 
-@Table(name="Bills")
+@Table
 /*
  * By default the table name will be the class name. Adding the 
  * (name="xyz") allows setting your own name.
@@ -36,16 +37,16 @@ import javax.persistence.Table;
 /**
  * @author Andrew Pierce - ajpierce1
  */
-public class BillItem {
+public class Bill {
 
-	public BillItem() {
+	public Bill() {
 		super();
 	}
 
-	public BillItem(String billName, double billCost) {
+	public Bill(String billName, double billCost) {
 		super();
-		this.billName = billName;
-		this.billCost = billCost;
+		this.name = billName;
+		this.cost = billCost;
 
 	}
 
@@ -58,23 +59,23 @@ public class BillItem {
 	/*
 	 * This annotation 
 	 */
-	@GeneratedValue(generator="cust_seq")
-	@SequenceGenerator(name="cust_seq",sequenceName="cust_seq", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	/*
 	 * This annotation will instruct JPA to automatically generate the ID number
 	 * for each instance.
 	 */
-	@Column(name="ID")
 	/*
 	 * This annotation changes the column name for this field. 
 	 */
 	private int id;
 	@Column(name="name")
-	private String billName;
+	private String name;
 	@Column(name="cost")
-	private double billCost;
+	private double cost;
 
 	static DecimalFormat df = new DecimalFormat("$#.00");
+
+
 
 	/**
 	 * @return the id
@@ -91,36 +92,36 @@ public class BillItem {
 	}
 
 	/**
-	 * @return the billName
+	 * @return the name
 	 */
-	public String getBillName() {
-		return billName;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * @param billName the billName to set
+	 * @param name the name to set
 	 */
-	public void setBillName(String billName) {
-		this.billName = billName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
-	 * @return the billCost
+	 * @return the cost
 	 */
-	public double getBillCost() {
-		return billCost;
+	public double getCost() {
+		return cost;
 	}
 
 	/**
-	 * @param billCost the billCost to set
+	 * @param cost the cost to set
 	 */
-	public void setBillCost(double billCost) {
-		this.billCost = billCost;
+	public void setCost(double cost) {
+		this.cost = cost;
 	}
 
 	@Override
 	public String toString() {
-		return id + ": " + billName + ": " + df.format(billCost);
+		return id + ": " + name + ": " + df.format(cost);
 	}
 
 }

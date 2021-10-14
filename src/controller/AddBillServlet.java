@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.BillItem;
+import model.Bill;
 
 /**
  * Servlet implementation class addBillServlet
@@ -34,11 +34,11 @@ public class AddBillServlet extends HttpServlet {
 		String billName = request.getParameter("billName");
 		String billCost = request.getParameter("billCost");
 		
-		BillItem newBill = new BillItem(billName,Double.parseDouble(billCost));
-		BillItemHelper dao = new BillItemHelper();
+		Bill newBill = new Bill(billName,Double.parseDouble(billCost));
+		BillHelper dao = new BillHelper();
 		dao.addBill(newBill);
 		
-		getServletContext().getRequestDispatcher("/StartPage.html").forward(request, response);
+		getServletContext().getRequestDispatcher("/start-page.html").forward(request, response);
 		
 	}
 

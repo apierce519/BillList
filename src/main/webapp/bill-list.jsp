@@ -14,8 +14,8 @@
 			<c:forEach items="${requestScope.allBills}" var = "currentBill">
 				<tr>
 					<td><input type = "radio" name = "id" value = "${currentBill.id}"></td>
-					<td>${currentBill.billName}</td>
-					<td>${currentBill.billCost}</td>
+					<td>${currentBill.name}</td>
+					<td>${currentBill.cost}</td>
 				</tr>
 			</c:forEach>
 		</table>

@@ -26,12 +26,12 @@ public class ViewAllBillsServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		BillItemHelper dao = new BillItemHelper();
+		BillHelper dao = new BillHelper();
 		request.setAttribute("allBills", dao.showAllBills());
-		String path = "/billList.jsp";
+		String path = "/bill-list.jsp";
 		
 		if(dao.showAllBills().isEmpty()) {
-			path = "/StartPage.html";
+			path = "/start-page.html";
 		}
 		getServletContext().getRequestDispatcher(path).forward(request, response);
 	}

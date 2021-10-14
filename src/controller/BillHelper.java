@@ -12,12 +12,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import model.BillItem;
+import model.Bill;
 
 /**
  * @author Andrew Pierce - ajpierce1
  */
-public class BillItemHelper {
+public class BillHelper {
 	/*
 	 * EMF is used to construct new EM (which I don't believe have their own
 	 * constructors). The EM is used to add, delete, or edit a set of entities
@@ -32,7 +32,7 @@ public class BillItemHelper {
 	 *               following. persist() method makes the instance managed and
 	 *               persistent. commit() method writes the changes to the database.
 	 */
-	public void addBill(BillItem newBill) {
+	public void addBill(Bill newBill) {
 		// TODO Auto-generated method stub
 		EntityManager em = emFactory.createEntityManager();
 		em.getTransaction().begin();
@@ -47,9 +47,9 @@ public class BillItemHelper {
 	 * table data?
 	 */
 	@SuppressWarnings("unchecked")
-	public List<BillItem> showAllBills() {
+	public List<Bill> showAllBills() {
 		EntityManager em = emFactory.createEntityManager();
-		List<BillItem> allbills = em.createQuery("SELECT i FROM BillItem i").getResultList();
+		List<Bill> allbills = em.createQuery("SELECT i FROM Bill i").getResultList();
 		return allbills;
 
 	}
@@ -64,13 +64,13 @@ public class BillItemHelper {
 	 *         whichever section. getResultList() - Creates a new List of BillItems
 	 *         from the TypedQuery's results.
 	 */
-	public List<BillItem> searchByName(String name) {
+	public List<Bill> searchByName(String name) {
 		// TODO Auto-generated method stub
 		EntityManager em = emFactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<BillItem> typedQuery = em.createQuery("select bill from BillItem bill where bill.billName = :selectedBillName", BillItem.class);
+		TypedQuery<Bill> typedQuery = em.createQuery("select bill from Bill bill where bill.name = :selectedBillName", Bill.class);
 		typedQuery.setParameter("selectedBillName", name);
-		List<BillItem> foundBills = typedQuery.getResultList();
+		List<Bill> foundBills = typedQuery.getResultList();
 		em.close();
 		return foundBills;
 	}
@@ -80,13 +80,13 @@ public class BillItemHelper {
 	 * @return
 	 * 
 	 */
-	public List<BillItem> searchByCost(double cost) {
+	public List<Bill> searchByCost(double cost) {
 		// TODO Auto-generated method stub
 		EntityManager em = emFactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<BillItem> typedQuery =em.createQuery("select bi from BillItem bi where bi.billCost >= :selectedCost",BillItem.class);
+		TypedQuery<Bill> typedQuery =em.createQuery("select bi from Bill bi where bi.cost >= :selectedCost",Bill.class);
 		typedQuery.setParameter("selectedCost", cost);
-		List<BillItem> foundBills = typedQuery.getResultList();
+		List<Bill> foundBills = typedQuery.getResultList();
 		em.close();
 		return foundBills;
 	}
@@ -94,11 +94,11 @@ public class BillItemHelper {
 	/**
 	 * @param idSearchEntry
 	 */
-	public BillItem searchBillsById(int idSearchEntry) {
+	public Bill searchBillsById(int idSearchEntry) {
 		// TODO Auto-generated method stub
 		EntityManager em = emFactory.createEntityManager();
 		em.getTransaction().begin();
-		BillItem found = em.find(BillItem.class,idSearchEntry);
+		Bill found = em.find(Bill.class,idSearchEntry);
 		em.close();
 		return found;
 	}
@@ -108,7 +108,7 @@ public class BillItemHelper {
 	 * update method.
 	 * in the merge method, 
 	 */
-	public void editBillEntry(BillItem selectedEntry) {
+	public void editBillEntry(Bill selectedEntry) {
 		// TODO Auto-generated method stub
 		EntityManager em = emFactory.createEntityManager();
 		em.getTransaction().begin();
@@ -122,18 +122,18 @@ public class BillItemHelper {
 	/**
 	 * @param billToDelete
 	 */
-	public void deleteBillEntry(BillItem billToDelete) {
+	public void deleteBillEntry(Bill billToDelete) {
 		// TODO Auto-generated method stub
 		EntityManager em = emFactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<BillItem> typedQuery = em.createQuery("select bi from BillItem bi where bi.billName = :selectedName and bi.billCost = :selectedCost",BillItem.class);
+		TypedQuery<Bill> typedQuery = em.createQuery("select bi from Bill bi where bi.name = :selectedName and bi.cost = :selectedCost",Bill.class);
 		
-		typedQuery.setParameter("selectedName", billToDelete.getBillName());
-		typedQuery.setParameter("selectedCost", billToDelete.getBillCost());
+		typedQuery.setParameter("selectedName", billToDelete.getName());
+		typedQuery.setParameter("selectedCost", billToDelete.getCost());
 		
 		typedQuery.setMaxResults(1);
 		
-		BillItem result = typedQuery.getSingleResult();
+		Bill result = typedQuery.getSingleResult();
 		
 		em.remove(result);
 		em.getTransaction().commit();

@@ -8,8 +8,8 @@
 </head>
 <body>
 	<form action = "editBillServlet" method = "post">
-		Bill name: <input type = "text" name = "billName" value = "${billToEdit.billName}">
-		Bill cost: <input type = "text" name = "billCost" value = "${billToEdit.billCost}">
+		Bill name: <input type = "text" name = "billName" value = "${billToEdit.name}">
+		Bill cost: <input type = "text" name = "billCost" value = "${billToEdit.cost}">
 		<input type = "hidden" name = "id" value = "${billToEdit.id}">
 		<input type = "submit" value = "Save Edited Bill">
 	</form>

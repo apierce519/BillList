@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.BillItem;
+import model.Bill;
 
 /**
  * Servlet implementation class NavigationServlet
@@ -43,7 +43,7 @@ public class NavigationServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 
-		BillItemHelper dao = new BillItemHelper();
+		BillHelper dao = new BillHelper();
 
 		String act = request.getParameter("doThisCommand");
 		String path = "/viewAllBillsServlet";
@@ -51,22 +51,29 @@ public class NavigationServlet extends HttpServlet {
 		if (act.equals("delete")) {
 			try {
 				Integer tempId = Integer.parseInt(request.getParameter("id"));
-				BillItem billToDelete = dao.searchBillsById(tempId);
-				dao.deleteBillEntry(billToDelete);
+				Bill billToDelete = dao.searchBillsById(tempId);
+				try {
+					dao.deleteBillEntry(billToDelete);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("This cannot be deleted because it belongs to a list.");
+					getServletContext().getRequestDispatcher(path).forward(request, response);
+				}
 			} catch (NumberFormatException e) {
 				System.out.println("No item selected.");
 			}
 		} else if (act.equals("edit")) {
 			try {
 				Integer tempId = Integer.parseInt(request.getParameter("id"));
-				BillItem billToEdit = dao.searchBillsById(tempId);
+				Bill billToEdit = dao.searchBillsById(tempId);
 				request.setAttribute("billToEdit", billToEdit);
-				path = "/editBill.jsp";
+				path = "/edit-bill.jsp";
 			} catch (NumberFormatException e) {
 				System.out.println("No item selected.");
 			}
 		} else if (act.equals("add")) {
-			path = "/StartPage.html";
+			path = "/start-page.html";
 		}
 		getServletContext().getRequestDispatcher(path).forward(request, response);
 	}

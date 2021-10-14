@@ -20,7 +20,7 @@
 				<c:forEach var = "listVal" items="${currentlist.listOfBills}">
 					<tr>
 						<td></td>
-						<td colspan = "3">${listVal.billName},${listVal.billCost}</td>
+						<td colspan = "3">${listVal.name} | ${listVal.cost}</td>
 					</tr>
 				</c:forEach>
 			</c:forEach>
@@ -33,7 +33,7 @@
 	
 	<ul>
 		<li><a href="generateBillItemListServlet">Create a new List</a></li>
-		<li><a href="StartPage.html">Return to Start Page</a></li>
+		<li><a href="start-page.html">Return to Start Page</a></li>
 	</ul>
 	
 </body>

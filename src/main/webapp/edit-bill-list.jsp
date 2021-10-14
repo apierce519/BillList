@@ -5,13 +5,27 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Edit Bill List</title>
 </head>
 <body>
-
-<form action = "editBillList">
-
-
-</form>
+<h1>Edit Bill List</h1>
+<form action = "editBillListServlet	" method = "post">
+	List Name: <input type = "text" name = "${billListToEdit.listName}"><br>
+		<br>
+		Available Bills:<br>
+		
+			<select name = "allBills" multiple size = "6">
+			
+				<c:forEach items = "${requestScope.allBills}" var = "currentitem">
+				
+					<option value = "${currentitem.id}">${currentitem.name} | ${currentitem.cost}</option>
+					
+				</c:forEach>
+			
+			</select>
+		<br>
+		<input type = "submit" value = "Create list and Add Bills">
+		
+	</form>
 </body>
 </html>

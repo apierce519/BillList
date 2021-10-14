@@ -17,6 +17,7 @@ import model.BillList;
 @WebServlet("/viewAllBillListsServlet")
 public class ViewAllBillListsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	String path = "/view-all-bill-lists.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -33,17 +34,9 @@ public class ViewAllBillListsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		BillListHelper blh = new BillListHelper();
-		List<BillList> bl = blh.getLists();
-		request.setAttribute("allLists", bl);
-		System.out.println(blh.getLists());
-		for (BillList a : bl) {
-			System.out.println(a.toString());
-			if (bl.isEmpty()) {
-				request.setAttribute("allLists", " ");
-			}
-		}
-		getServletContext().getRequestDispatcher("/view-all-bill-lists.jsp").forward(request, response);
+		List<BillList> blh = getBillLists();
+		validateBillList(request, blh);
+		sendToNextPage(request, response, path);
 	}
 
 	/**
@@ -57,4 +50,29 @@ public class ViewAllBillListsServlet extends HttpServlet {
 
 	}
 
-}
+	public HttpServletRequest validateBillList(HttpServletRequest request, List<BillList> tempList) {
+		if(tempList.isEmpty()) {
+			path = "/generateBillItemListServlet";
+			System.out.println("No lists were found");
+		}else {
+			request.setAttribute("allLists", tempList);
+			System.out.println("Not empty");
+			System.out.println(tempList.toString());
+		}
+		return request;
+	}
+	
+	public void sendToNextPage(HttpServletRequest request,HttpServletResponse response, String path) {
+		try {
+			getServletContext().getRequestDispatcher(path).forward(request, response);
+		} catch(ServletException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public List<BillList> getBillLists(){
+		BillListHelper blh = new BillListHelper();
+		List<BillList> blList = blh.getLists();
+		return blList;
+	}}

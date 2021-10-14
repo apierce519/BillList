@@ -18,7 +18,7 @@
 			
 				<c:forEach items = "${requestScope.allBills}" var = "currentitem">
 				
-					<option value = "${currentitem.id}">${currentitem.billName} | ${currentitem.billCost}</option>
+					<option value = "${currentitem.id}">${currentitem.name} | ${currentitem.cost}</option>
 					
 				</c:forEach>
 			

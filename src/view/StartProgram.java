@@ -3,8 +3,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Scanner;
 
-import controller.BillItemHelper;
-import model.BillItem;
+import controller.BillHelper;
+import model.Bill;
 
 /**
  * @author Andrew Pierce - ajpierce1
@@ -18,7 +18,7 @@ import model.BillItem;
 public class StartProgram {
 	static Scanner in = new Scanner(System.in);
 	static DecimalFormat df = new DecimalFormat("$#.00");
-	static BillItemHelper bih = new BillItemHelper();
+	static BillHelper bih = new BillHelper();
 
 	public static void main(String[] args) {
 		MainMenu();
@@ -81,7 +81,7 @@ public class StartProgram {
 		System.out.println("Enter bill amount: ");
 		performDoubleValidation();
 		double billCost = in.nextDouble();
-		BillItem newBillEntry = new BillItem(billName, billCost);
+		Bill newBillEntry = new Bill(billName, billCost);
 		bih.addBill(newBillEntry);
 		System.out.println(billName + ": " + df.format(billCost) + " added.");
 	}
@@ -111,7 +111,7 @@ public class StartProgram {
 	}
 
 	private static void searchBillsByName() {
-		List<BillItem> billEntry;
+		List<Bill> billEntry;
 		System.out.println("Enter Name: ");
 		String name = in.nextLine();
 		billEntry = bih.searchByName(name);
@@ -139,7 +139,7 @@ public class StartProgram {
 	}
 
 	private static void searchBillsByCost() {
-		List<BillItem> billEntry;
+		List<Bill> billEntry;
 		System.out.println("Will show any bill > entered cost.\nEnter Cost: ");
 		performDoubleValidation();
 		double cost = in.nextDouble();
@@ -159,7 +159,7 @@ public class StartProgram {
 
 	}
 
-	private static void editOrDeleteMenu(BillItem selectedEntry) {
+	private static void editOrDeleteMenu(Bill selectedEntry) {
 
 		boolean continueMenu = true;
 
@@ -188,7 +188,7 @@ public class StartProgram {
 		}
 	}
 
-	public static void editBillEntry(BillItem billToEdit) {
+	public static void editBillEntry(Bill billToEdit) {
 		System.out.println("1. Edit Name\n2. Edit Cost");
 		performIntValidation();
 		int selection = in.nextInt();
@@ -199,14 +199,14 @@ public class StartProgram {
 			case 1:
 				System.out.println("Enter new bill Name: ");
 				String newBillName = in.nextLine();
-				billToEdit.setBillName(newBillName);
+				billToEdit.setName(newBillName);
 				continueMenu = false;
 				break;
 			case 2:
 				System.out.println("Enter new bill Cost: ");
 				performDoubleValidation();
 				double newBillCost = in.nextDouble();
-				billToEdit.setBillCost(newBillCost);
+				billToEdit.setCost(newBillCost);
 				continueMenu = false;
 				break;
 			default:
@@ -218,7 +218,7 @@ public class StartProgram {
 		}
 	}
 
-	public static void deleteBillEntry(BillItem billToDelete) {
+	public static void deleteBillEntry(Bill billToDelete) {
 		System.out.println("This item will be deleted!!\nAre you sure?\n1. Yes\n2. No");
 		performIntValidation();
 		int selection = in.nextInt();
@@ -231,12 +231,12 @@ public class StartProgram {
 		}
 	}
 
-	private static void printEnteredList(List<BillItem> billList) {
+	private static void printEnteredList(List<Bill> billList) {
 		if (!billList.isEmpty()) {
 			System.out.println("----------------");
 			System.out.println("Matching Entries: ");
 			System.out.println("----------------");
-			for (BillItem a : billList) {
+			for (Bill a : billList) {
 				System.out.println(a.toString());
 			}
 			System.out.println("----------------");
